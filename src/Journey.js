@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 
 import { getColorForIndex } from "./App";
 
@@ -8,7 +8,7 @@ export const DistanceDuration = (data) => {
   const { distance, duration } = data;
   return (
     <div className="route__minor">
-      {duration} * {distance}
+      {duration} &middot; {distance}
     </div>
   );
 };
@@ -17,40 +17,59 @@ export const Step = (step) => {
   const { instructions } = step;
 
   return (
-    <div>
-      <DistanceDuration {...step} />
+    <div className="step">
       <div>{instructions}</div>
+      <DistanceDuration {...step} />
     </div>
   );
 };
 
 export const Route = (route) => {
+  const [showDirections, setShowDirections] = useState(false);
   const { index, start, end, arrival, departure, steps } = route;
 
   const startAddress = start.address.replace(", UK", "");
   const endAddress = end.address.replace(", UK", "");
   const backgroundColor = getColorForIndex(index);
 
+  const handleDirectionsClick = useCallback(
+    (evt) => {
+      evt.preventDefault();
+      setShowDirections(!showDirections);
+    },
+    [showDirections]
+  );
+  const directionsLabel = showDirections ? "Hide details" : "See details";
+
   return (
     <div className="route">
       <span className="route__stripe" style={{ backgroundColor }} />
-      <div className="route__major">
+      <div className="route__major" style={{ color: backgroundColor }}>
         <span>{startAddress}</span>
         <span>{endAddress}</span>
       </div>
-      <div className="route__minor"> 
+      <div className="route__minor">
         {departure} -> {arrival}
       </div>
       <DistanceDuration {...route} />
-      {/* <ul>
-        {steps.map((step) => {
-          return (
-            <li>
-              <Step {...step} />
-            </li>
-          );
-        })}
-      </ul> */}
+      <a href="#" className="route__directions" onClick={handleDirectionsClick}>
+        {directionsLabel}
+      </a>
+      {showDirections && (
+        <ul className="route__steps">
+          <span
+            className="route__steps__background"
+            style={{ backgroundColor }}
+          />
+          {steps.map((step) => {
+            return (
+              <li>
+                <Step {...step} />
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };

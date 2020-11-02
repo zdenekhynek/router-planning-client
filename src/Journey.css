@@ -1,4 +1,5 @@
-.journey {}
+.journey {
+}
 
 .journey h3 {
   margin: 20px;
@@ -10,7 +11,7 @@
   position: relative;
   padding: 20px;
   margin: 20px;
-  border-radius: 2px;
+  border-radius: 4px;
   box-shadow: 0px 5px 13px 2px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
@@ -20,6 +21,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
   width: 5px;
   height: 100%;
   background-color: red;
@@ -37,5 +39,43 @@
 
 .route__minor {
   font-size: 12px;
+}
+
+.route__steps {
+  position: relative;
+  list-style-type: none;
+  padding: 20px;
+  margin: 20px -20px -20px;
+  color: white;
+}
+
+.route__steps__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: brightness(75%);
+}
+
+.route__directions {
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
   color: #888;
+}
+
+.route__directions:hover {
+  text-decoration: none;
+}
+
+.step {
+  position: relative;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.route__steps .route__minor {
+  color: white;
+  opacity: 0.6;
 }
