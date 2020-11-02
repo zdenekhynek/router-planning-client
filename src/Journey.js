@@ -1,9 +1,17 @@
 import React from "react";
 
+import { getColorForIndex } from "./App";
+
+import "./Journey.css";
+
 export const DistanceDuration = (data) => {
   const { distance, duration } = data;
-  return <div>{distance}/{duration}</div>;
-}
+  return (
+    <div className="route__minor">
+      {duration} * {distance}
+    </div>
+  );
+};
 
 export const Step = (step) => {
   const { instructions } = step;
@@ -17,18 +25,24 @@ export const Step = (step) => {
 };
 
 export const Route = (route) => {
-  const { start, end, arrival, departure, steps } = route;
+  const { index, start, end, arrival, departure, steps } = route;
+
+  const startAddress = start.address.replace(", UK", "");
+  const endAddress = end.address.replace(", UK", "");
+  const backgroundColor = getColorForIndex(index);
 
   return (
-    <div>
-      <div>
-        From: {start.address} at {departure}
+    <div className="route">
+      <span className="route__stripe" style={{ backgroundColor }} />
+      <div className="route__major">
+        <span>{startAddress}</span>
+        <span>{endAddress}</span>
       </div>
-      <div>
-        To: {end.address} at {arrival}
+      <div className="route__minor"> 
+        {departure} -> {arrival}
       </div>
       <DistanceDuration {...route} />
-      <ul>
+      {/* <ul>
         {steps.map((step) => {
           return (
             <li>
@@ -36,7 +50,7 @@ export const Route = (route) => {
             </li>
           );
         })}
-      </ul>
+      </ul> */}
     </div>
   );
 };
@@ -47,10 +61,11 @@ export default function Journey({ itinerary }) {
   }
 
   return (
-    <div>
-      {itinerary.map((routes) => {
+    <div className="journey">
+      <h3>Your trip</h3>
+      {itinerary.map((routes, i) => {
         if (routes.length) {
-          return <Route {...routes[0]} />;
+          return <Route index={i} {...routes[0]} />;
         }
 
         return null;

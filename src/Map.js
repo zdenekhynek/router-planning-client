@@ -2,11 +2,13 @@ import React, { useCallback, useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { Polyline } from "@react-google-maps/api";
 
+import { getColorForIndex } from "./App";
+
 export const LIBRARIES = ["geometry"];
 
 const containerStyle = {
   width: "100%",
-  height: "800px",
+  height: "100%",
 };
 
 export const convertArrayToLatLng = (arr) => {
@@ -26,8 +28,6 @@ export const Map = ({ itinerary, callbacks = {} }) => {
     setMap(null);
   }, []);
 
-  const colors = ["#f00", "#0f0", "#00f", "#f0d", "#cc4"];
-
   useEffect(() => {
     if (window.google && itinerary && map) {
       const { decodePath } = window.google.maps.geometry.encoding;
@@ -37,7 +37,6 @@ export const Map = ({ itinerary, callbacks = {} }) => {
 
       const newBounds = new window.google.maps.LatLngBounds();
 
-      console.log("itinerary", itinerary);
       itinerary.forEach((routeArr, i) => {
         if (routeArr.length) {
           const route = routeArr[0];
@@ -55,7 +54,7 @@ export const Map = ({ itinerary, callbacks = {} }) => {
             points.forEach((p) => {
               if (p) {
                 const path = decodePath(p);
-                const strokeColor = colors[i];
+                const strokeColor = getColorForIndex(i);
                 newPolylines.push({ path, strokeColor });
               }
             });
@@ -108,7 +107,7 @@ export const Map = ({ itinerary, callbacks = {} }) => {
 
         {polylines.map((polyline, i) => {
           const { path, strokeColor } = polyline;
-          return <Polyline key={i} options={{ strokeColor, strokeWeight: 1 }} path={path} />;
+          return <Polyline key={i} options={{ strokeColor, strokeWeight: 2 }} path={path} />;
         })}
       </GoogleMap>
     </LoadScript>

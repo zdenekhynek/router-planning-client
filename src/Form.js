@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from "react";
 
+import "./Form.css";
+
 export const REGIONS = ["Scottish Highlands"];
 export const DATES = [["2020-12-01", "2020-12-14"]];
-export const TYPES = ["city", "outdoor"];
+export const TYPES = ["city", "outdoor", "seaside", "rural"];
 
-export default function Form({ onSubmit }) {
+export default function Form({ isLoading, onSubmit }) {
   const [region, setRegion] = useState(REGIONS[0]);
   const [dates, setDates] = useState(DATES[0]);
   const [types, setTypes] = useState([]);
@@ -16,7 +18,6 @@ export default function Form({ onSubmit }) {
 
   const handleDatesChange = useCallback((event) => {
     const datesString = event.target.value;
-    console.log("event", event);
     setDates(datesString.split(" – "));
   }, []);
 
@@ -38,14 +39,12 @@ export default function Form({ onSubmit }) {
     }
 
     setTypes(newTypes);
-    console.log('newTypes', newTypes, newTypes.length, newTypes.length > 0);
     setIsEnabled(newTypes.length > 0);
   }, []);
 
   const handleSubmit = useCallback(
     (evt) => {
       evt.preventDefault();
-      console.log('isEnabled', isEnabled);
       if (isEnabled) {
         onSubmit({ region, dates, types });
       }
@@ -54,35 +53,46 @@ export default function Form({ onSubmit }) {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Region:
-        <select name="region" onChange={handleRegionChange}>
-          {REGIONS.map((region) => {
-            return <option>{region}</option>;
-          })}
-        </select>
-      </label>
-      <label>
-        Dates:
-        <select name="dates" onChange={handleDatesChange}>
-          {DATES.map((date) => {
-            return <option>{date.join(" – ")}</option>;
-          })}
-        </select>
-      </label>
-      <label>
-        Types:
-        {TYPES.map((type) => {
-          return (
-            <span>
-              <input type="checkbox" name={type} onChange={handleTypesChange} />
-              {type}
-            </span>
-          );
-        })}
-      </label>
-      <button disabled={!isEnabled}>Search</button>
+    <form className="form" onSubmit={handleSubmit}>
+      <div className="form__row">
+        <label>
+          <span>Region</span>
+          <select name="region" onChange={handleRegionChange}>
+            {REGIONS.map((region) => {
+              return <option>{region}</option>;
+            })}
+          </select>
+        </label>
+        <label>
+          <span>Dates</span>
+          <select name="dates" onChange={handleDatesChange}>
+            {DATES.map((date) => {
+              return <option>{date.join(" – ")}</option>;
+            })}
+          </select>
+        </label>
+      </div>
+      <div className="form__row">
+        <label>
+          <span>Types</span>
+          <div className="form__grid">
+            {TYPES.map((type) => {
+              return (
+                <span>
+                  <input
+                    type="checkbox"
+                    name={type}
+                    onChange={handleTypesChange}
+                  />
+                  {type}
+                </span>
+              );
+            })}
+          </div>
+        </label>
+      </div>
+      {!isLoading && <button disabled={!isEnabled}>Plan Trip</button>}
+      {isLoading && <div className="form__loading">Assembling your trip...</div>}
     </form>
   );
 }
