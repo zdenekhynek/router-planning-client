@@ -1,6 +1,6 @@
 export const getUrl = (region, dates, types) => {
   const baseUrl = `${process.env.REACT_APP_JOURNEY_API_HOST}/api/v1`;
-  return `${baseUrl}/journey`;
+  return `${baseUrl}/journeys`;
 };
 
 export const parseResult = ({ success, data }) => {
@@ -27,7 +27,7 @@ export default async (region, dates, types) => {
       },
       body: JSON.stringify(payload),
     };
-    const result = await fetch(url).then((resp) => resp.json());
+    const result = await fetch(url, options).then((resp) => resp.json());
     return parseResult(result);
   } catch (err) {
     console.error(err);
