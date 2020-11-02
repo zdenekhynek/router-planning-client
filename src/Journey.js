@@ -17,7 +17,7 @@ export const Step = (step) => {
 };
 
 export const Route = (route) => {
-  const { start, end, arrival, departure, distance, duration, steps } = route;
+  const { start, end, arrival, departure, steps } = route;
 
   return (
     <div>
@@ -42,7 +42,6 @@ export const Route = (route) => {
 };
 
 export default function Journey({ itinerary }) {
-  console.log("itinerary", itinerary);
   if (!itinerary) {
     return null;
   }

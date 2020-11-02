@@ -8,6 +8,7 @@ export default function Form({ onSubmit }) {
   const [region, setRegion] = useState(REGIONS[0]);
   const [dates, setDates] = useState(DATES[0]);
   const [types, setTypes] = useState([]);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const handleRegionChange = useCallback((event) => {
     setRegion(event.target.value);
@@ -15,14 +16,14 @@ export default function Form({ onSubmit }) {
 
   const handleDatesChange = useCallback((event) => {
     const datesString = event.target.value;
-    console.log('event', event);
+    console.log("event", event);
     setDates(datesString.split(" – "));
   }, []);
 
   const handleTypesChange = useCallback((event) => {
     const type = event.target.name;
     const isChecked = event.target.checked;
-    
+
     let newTypes = types;
     if (isChecked) {
       //  add item to array
@@ -37,14 +38,20 @@ export default function Form({ onSubmit }) {
     }
 
     setTypes(newTypes);
+    console.log('newTypes', newTypes, newTypes.length, newTypes.length > 0);
+    setIsEnabled(newTypes.length > 0);
   }, []);
 
-
-  const handleSubmit = useCallback((evt) => {
-    console.log("handleSubmit", region, dates, types);
-    evt.preventDefault();
-    onSubmit({ region, dates, types });
-  }, [region, dates, types]);
+  const handleSubmit = useCallback(
+    (evt) => {
+      evt.preventDefault();
+      console.log('isEnabled', isEnabled);
+      if (isEnabled) {
+        onSubmit({ region, dates, types });
+      }
+    },
+    [region, dates, types, isEnabled]
+  );
 
   return (
     <form onSubmit={handleSubmit}>
@@ -69,17 +76,13 @@ export default function Form({ onSubmit }) {
         {TYPES.map((type) => {
           return (
             <span>
-              <input
-                type="checkbox"
-                name={type}
-                onChange={handleTypesChange}
-              />
+              <input type="checkbox" name={type} onChange={handleTypesChange} />
               {type}
             </span>
           );
         })}
       </label>
-      <button>Search</button>
+      <button disabled={!isEnabled}>Search</button>
     </form>
   );
 }
