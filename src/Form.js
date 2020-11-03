@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 
 import "./Form.css";
 
-export const REGIONS = ["Scottish Highlands"];
+export const REGIONS = ["Scottish Highlands", "Cornwall"];
 export const DATES = [["2020-12-01", "2020-12-14"]];
 export const TYPES = ["city", "outdoor", "seaside", "rural"];
 
