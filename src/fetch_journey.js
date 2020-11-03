@@ -4,7 +4,6 @@ export const getUrl = (region, dates, types) => {
 };
 
 export const parseResult = ({ success, data }) => {
-  console.log("data", data);
   if (success) {
     return data;
   }

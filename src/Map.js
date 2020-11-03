@@ -69,7 +69,6 @@ export const Map = ({ itinerary, callbacks = {} }) => {
     }
   }, [window.google, itinerary, map]);
 
-  console.log("itinerary", itinerary);
   const [shouldPosition, setShouldPosition] = useState(true);
 
   useEffect(() => {

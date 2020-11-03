@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 
 import "./Form.css";
 
-export const REGIONS = ["Scottish Highlands", "Cornwall"];
+export const REGIONS = ["Scottish Highlands", "West Country", "Cornwall"];
 export const DATES = [["2020-12-01", "2020-12-14"]];
 export const TYPES = ["city", "outdoor", "seaside", "rural"];
 
@@ -17,8 +17,8 @@ export default function Form({ isLoading, onSubmit }) {
   }, []);
 
   const handleDatesChange = useCallback((event) => {
-    const datesString = event.target.value;
-    setDates(datesString.split(" – "));
+    const dates = [event.target.value,"2020-12-14"];
+    setDates(dates);
   }, []);
 
   const handleTypesChange = useCallback((event) => {
@@ -65,11 +65,7 @@ export default function Form({ isLoading, onSubmit }) {
         </label>
         <label>
           <span>Dates</span>
-          <select name="dates" onChange={handleDatesChange}>
-            {DATES.map((date) => {
-              return <option>{date.join(" – ")}</option>;
-            })}
-          </select>
+          <input name="dates" type="date" value={dates[0]} onChange={handleDatesChange} />
         </label>
       </div>
       <div className="form__row">
